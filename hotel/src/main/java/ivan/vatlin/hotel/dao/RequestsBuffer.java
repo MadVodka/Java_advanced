@@ -1,15 +1,16 @@
 package ivan.vatlin.hotel.dao;
 
 import ivan.vatlin.hotel.dto.HotelBookRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.logging.Logger;
 
 public class RequestsBuffer {
     private Deque<HotelBookRequest> requestsQueue;
     private int capacity;
-    private Logger logger = Logger.getGlobal();
+    private Logger logger = LoggerFactory.getLogger(RequestsBuffer.class);
 
     public RequestsBuffer(int capacity) {
         if (capacity < 0) {
@@ -24,13 +25,13 @@ public class RequestsBuffer {
             try {
                 wait();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.debug(String.format("Thread interrupted in trying to put request %n%s", e.getMessage()));
             }
         }
 
         if (requestsQueue.size() < capacity) {
             requestsQueue.add(hotelBookRequest);
-            logger.info("Producer (" + Thread.currentThread().getName() + "): sent " + hotelBookRequest);
+            logger.info(String.format("Producer (%s): sent %s", Thread.currentThread().getName(), hotelBookRequest));
             notifyAll();
             return true;
         }
@@ -42,12 +43,12 @@ public class RequestsBuffer {
             try {
                 wait();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.debug(String.format("Thread interrupted in trying to get request %n%s", e.getMessage()));
             }
         }
 
         HotelBookRequest hotelBookRequest = requestsQueue.pop();
-        logger.info("Consumer (" + Thread.currentThread().getName() + "): received " + hotelBookRequest);
+        logger.info(String.format("Consumer (%s): received %s", Thread.currentThread().getName(), hotelBookRequest));
         notifyAll();
         return hotelBookRequest;
     }
