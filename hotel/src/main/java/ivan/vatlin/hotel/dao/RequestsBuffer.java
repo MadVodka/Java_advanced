@@ -26,6 +26,7 @@ public class RequestsBuffer {
                 wait();
             } catch (InterruptedException e) {
                 logger.debug(String.format("Thread interrupted in trying to put request %n%s", e.getMessage()));
+                putRequest(hotelBookRequest);
             }
         }
 
@@ -44,6 +45,7 @@ public class RequestsBuffer {
                 wait();
             } catch (InterruptedException e) {
                 logger.debug(String.format("Thread interrupted in trying to get request %n%s", e.getMessage()));
+                getRequest();
             }
         }
 
