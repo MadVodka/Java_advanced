@@ -1,40 +1,51 @@
 package ivan.vatlin.dto;
 
 import java.io.Serializable;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Account implements Serializable {
     private long id;
-    private long sum;
+    private long balance;
+    private Lock lock = new ReentrantLock();
 
-    public Account(long id, long sum) {
+    public Account(long id, long balance) {
         if (id < 0) {
             throw new IllegalArgumentException("Значение id клинета не может быть мешь нуля");
         }
         this.id = id;
-        if (sum < 0) {
+        if (balance < 0) {
             throw new IllegalArgumentException("Сумма не может быть меньше нуля");
         }
-        this.sum = sum;
+        this.balance = balance;
     }
 
     public long getId() {
         return id;
     }
 
-    public long getSum() {
-        return sum;
+    public long getBalance() {
+        return balance;
     }
 
-    public void setSum(long sum) {
-        this.sum = sum;
+    public void setBalance(long balance) {
+        this.balance = balance;
+    }
+
+    public void lockObject() {
+        lock.lock();
+    }
+
+    public void unlockObject() {
+        lock.unlock();
     }
 
     @Override
     public String toString() {
         return "Account{" +
                 "id=" + id +
-                ", sum=" + sum +
-                '}';
+                ", sum=" + balance +
+                '}'+"\n";
     }
 
     @Override
