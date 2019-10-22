@@ -5,6 +5,7 @@ import ivan.vatlin.repo.InitialAccountRepository;
 
 import javax.security.auth.login.AccountNotFoundException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AccountService {
     private InitialAccountRepository initialAccountRepository = InitialAccountRepository.getInstance();
@@ -25,16 +26,14 @@ public class AccountService {
         }
     }
 
-    public long getTotalMoneySum() {
+    public int getNumberOfAccounts() {
+        return getAll().size();
+    }
+
+    public long getTotalMoneySumOfAccounts() {
         return initialAccountRepository.getAll().stream()
                 .mapToLong(Account::getBalance)
                 .sum();
     }
 
-    public void transferMoney(Account accountFrom, Account accountTo, long amountMoney) {
-        long accountFromBalance = accountFrom.getBalance();
-        long accountToBalance = accountTo.getBalance();
-        accountFrom.setBalance(accountFromBalance - amountMoney);
-        accountTo.setBalance(accountToBalance + amountMoney);
-    }
 }

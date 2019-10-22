@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class Account implements Serializable {
+public class Account implements Serializable, Comparable<Account> {
     private long id;
     private long balance;
-    private Lock lock = new ReentrantLock();
+    private transient Lock lock = new ReentrantLock();
 
     public Account(long id, long balance) {
         if (id < 0) {
@@ -61,5 +61,10 @@ public class Account implements Serializable {
     @Override
     public int hashCode() {
         return (int) (id ^ (id >>> 32));
+    }
+
+    @Override
+    public int compareTo(Account otherAccount) {
+        return Long.compare(id, otherAccount.id);
     }
 }
