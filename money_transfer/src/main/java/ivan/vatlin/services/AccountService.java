@@ -5,7 +5,6 @@ import ivan.vatlin.repo.InitialAccountRepository;
 
 import javax.security.auth.login.AccountNotFoundException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class AccountService {
     private InitialAccountRepository initialAccountRepository = InitialAccountRepository.getInstance();

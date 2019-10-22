@@ -15,12 +15,12 @@ public class TransferMoneyTask implements Runnable {
 
     @Override
     public void run() {
-        Account senderAccount = createRandomAccount();
-        Account recipientAccount = createRandomAccount();
+        Account senderAccount = getRandomAccount();
+        Account recipientAccount = getRandomAccount();
 
         int compareResult = senderAccount.compareTo(recipientAccount);
         if (compareResult == 0) {
-            logger.info("{} Аккаунт {} не может осуществить перевод самому себе",Thread.currentThread().getName(),
+            logger.info("{} Аккаунт {} не может осуществить перевод самому себе", Thread.currentThread().getName(),
                     senderAccount.getId());
         } else if (compareResult > 0) {
             recipientAccount.lockObject();
@@ -41,7 +41,7 @@ public class TransferMoneyTask implements Runnable {
         }
     }
 
-    private Account createRandomAccount() {
+    private Account getRandomAccount() {
         int accountIndex = ThreadLocalRandom.current().nextInt(accountService.getNumberOfAccounts());
         return accountService.getAll().get(accountIndex);
     }

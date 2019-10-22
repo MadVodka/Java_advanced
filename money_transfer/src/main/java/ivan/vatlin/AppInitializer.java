@@ -13,6 +13,9 @@ import java.util.List;
 public class AppInitializer {
     private static Logger logger = LoggerFactory.getLogger(AppInitializer.class);
 
+    private AppInitializer() {
+    }
+
     public static void initialize() {
             AccountsCreator accountsCreator = new AccountsCreator(10, 1000);
         List<Account> accounts = accountsCreator.create();

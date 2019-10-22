@@ -7,7 +7,8 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Account implements Serializable, Comparable<Account> {
     private long id;
     private long balance;
-    private transient Lock lock = new ReentrantLock();
+    private Lock lock = new ReentrantLock();
+    private static final long serialVersionUID = 1L;
 
     public Account(long id, long balance) {
         if (id < 0) {
@@ -45,7 +46,7 @@ public class Account implements Serializable, Comparable<Account> {
         return "Account{" +
                 "id=" + id +
                 ", sum=" + balance +
-                '}'+"\n";
+                '}';
     }
 
     @Override
