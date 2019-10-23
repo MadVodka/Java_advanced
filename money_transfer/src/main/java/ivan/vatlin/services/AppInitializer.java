@@ -18,7 +18,7 @@ public class AppInitializer {
     private AppInitializer() {
     }
 
-    public static boolean initialize() {
+    public static void initialize() {
         AccountsCreator accountsCreator = new AccountsCreator(QUANTITY_ACCOUNT, MAX_ACCOUNT_BALANCE);
         List<Account> accounts = accountsCreator.create();
         AccountService accountService = new AccountService();
@@ -32,14 +32,10 @@ public class AppInitializer {
             logger.info("Total sum of accounts: {}", accountService.getTotalMoneySumOfAccounts());
         } catch (FileNotFoundException e) {
             logger.warn("Файл или путь к файлу не найден.\n{}", e.getMessage());
-            return false;
         } catch (IOException e) {
             logger.warn("Ошибка при чтении/записи файлов.\n{}", e.getMessage());
-            return false;
         } catch (ClassNotFoundException e) {
             logger.warn("Ошибка при десериализации аккаунтов.\n{}", e.getMessage());
-            return false;
         }
-        return true;
     }
 }

@@ -12,8 +12,8 @@ public class TransferTaskExecutor {
     private static Logger logger = LoggerFactory.getLogger(TransferTaskExecutor.class);
     private static AccountService accountService = new AccountService();
 
-    private final int numberOfTasks = 1000;
-    private final int numberOfThreads = 20;
+    private static final int numberOfTasks = 1000;
+    private static final int numberOfThreads = 20;
     private TransferMoneyTask transferMoneyTask = new TransferMoneyTask();
     private ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
 
