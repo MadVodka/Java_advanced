@@ -24,7 +24,7 @@ public class TransferMoneyTask implements Runnable {
 
         int compareResult = senderAccount.compareTo(recipientAccount);
         if (compareResult == 0) {
-            logger.info("{} Аккаунт {} не может осуществить перевод самому себе", Thread.currentThread().getName(),
+            logger.warn("{} Аккаунт {} не может осуществить перевод самому себе", Thread.currentThread().getName(),
                     senderAccount.getId());
         } else if (compareResult > 0) {
             recipientAccount.lockObject();
@@ -35,8 +35,8 @@ public class TransferMoneyTask implements Runnable {
             } catch (NegativeMoneyAmountException | InsufficientBalanceException e) {
                 logger.warn(e.getMessage());
             } finally {
-                recipientAccount.unlockObject();
                 senderAccount.unlockObject();
+                recipientAccount.unlockObject();
             }
         } else {
             senderAccount.lockObject();

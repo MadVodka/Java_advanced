@@ -34,10 +34,12 @@ public class AccountFilesService {
         File[] files = fileFolder.listFiles();
         if (files != null) {
             for (File file : files) {
-                try (FileInputStream fileInputStream = new FileInputStream(file);
-                     ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
-                    Account account = (Account) objectInputStream.readObject();
-                    accounts.add(account);
+                if (file.isFile()) {
+                    try (FileInputStream fileInputStream = new FileInputStream(file);
+                         ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
+                        Account account = (Account) objectInputStream.readObject();
+                        accounts.add(account);
+                    }
                 }
             }
         }
