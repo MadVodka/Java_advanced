@@ -12,6 +12,7 @@
         <module>hotel</module>
         <module>money_transfer</module>
         <module>annotation_reflection</module>
+        <module>regex</module>
     </modules>
 
     <build>
