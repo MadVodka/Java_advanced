@@ -1,6 +1,8 @@
 package ivan.vatlin.tasks;
 
 import ivan.vatlin.dto.Account;
+import ivan.vatlin.exceptions.InsufficientBalanceException;
+import ivan.vatlin.exceptions.NegativeMoneyAmountException;
 import ivan.vatlin.services.AccountService;
 import ivan.vatlin.services.TransferMoneyService;
 import org.slf4j.Logger;
@@ -8,8 +10,10 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import static ivan.vatlin.dataholder.InitialAppData.MAX_ACCOUNT_BALANCE;
+
 public class TransferMoneyTask implements Runnable {
-    private Logger logger = LoggerFactory.getLogger(TransferMoneyTask.class);
+    private static Logger logger = LoggerFactory.getLogger(TransferMoneyTask.class);
     private AccountService accountService = new AccountService();
     private TransferMoneyService transferMoneyService = new TransferMoneyService();
 
@@ -26,18 +30,26 @@ public class TransferMoneyTask implements Runnable {
             recipientAccount.lockObject();
             senderAccount.lockObject();
 
-            transferMoneyService.doTransfer(senderAccount, recipientAccount, createRandomSumMoneyToSend());
-
-            senderAccount.unlockObject();
-            recipientAccount.unlockObject();
+            try {
+                transferMoneyService.doTransfer(senderAccount, recipientAccount, createRandomSumMoneyToSend());
+            } catch (NegativeMoneyAmountException | InsufficientBalanceException e) {
+                logger.warn(e.getMessage());
+            } finally {
+                recipientAccount.unlockObject();
+                senderAccount.unlockObject();
+            }
         } else {
             senderAccount.lockObject();
             recipientAccount.lockObject();
 
-            transferMoneyService.doTransfer(senderAccount, recipientAccount, createRandomSumMoneyToSend());
-
-            recipientAccount.unlockObject();
-            senderAccount.unlockObject();
+            try {
+                transferMoneyService.doTransfer(senderAccount, recipientAccount, createRandomSumMoneyToSend());
+            } catch (NegativeMoneyAmountException | InsufficientBalanceException e) {
+                logger.warn(e.getMessage());
+            } finally {
+                recipientAccount.unlockObject();
+                senderAccount.unlockObject();
+            }
         }
     }
 
@@ -47,6 +59,6 @@ public class TransferMoneyTask implements Runnable {
     }
 
     private long createRandomSumMoneyToSend() {
-        return ThreadLocalRandom.current().nextLong(1000);
+        return ThreadLocalRandom.current().nextLong(MAX_ACCOUNT_BALANCE);
     }
 }

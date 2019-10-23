@@ -10,19 +10,20 @@ import java.util.stream.IntStream;
 public class AccountsCreator {
     private int quantity;
     private Random random = new Random();
-    private int maxAccountSum;
+    private int maxBalance;
 
-    public AccountsCreator(int quantity, int maxAccountSum) {
-        if (quantity < 0 || maxAccountSum < 0) {
-            throw new IllegalArgumentException("Значения должны быть положительными");
+    public AccountsCreator(int quantity, int maxBalance) {
+        if (quantity < 0 || maxBalance < 0) {
+            throw new IllegalArgumentException("Значения количества аккаунтов и максимального баланса аккаунта" +
+                    " должны быть положительными");
         }
-        this.maxAccountSum = maxAccountSum;
+        this.maxBalance = maxBalance;
         this.quantity = quantity;
     }
 
     public List<Account> create() {
         return IntStream.range(0, quantity)
-                .mapToObj(id -> new Account(id, random.nextInt(maxAccountSum)))
+                .mapToObj(id -> new Account(id, random.nextInt(maxBalance)))
                 .collect(Collectors.toList());
     }
 }

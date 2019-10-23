@@ -1,18 +1,20 @@
 package ivan.vatlin.services;
 
 import ivan.vatlin.dto.Account;
+import ivan.vatlin.exceptions.InsufficientBalanceException;
+import ivan.vatlin.exceptions.NegativeMoneyAmountException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class TransferMoneyService {
     private Logger logger = LoggerFactory.getLogger(TransferMoneyService.class);
 
-    public void doTransfer(Account senderAccount, Account recipientAccount, long amountMoney) {
+    public void doTransfer(Account senderAccount, Account recipientAccount, long amountMoney)
+            throws NegativeMoneyAmountException, InsufficientBalanceException {
         String transferInfo = Thread.currentThread().getName() + " Аккаунт " + senderAccount.getId() +
                 " --> " + amountMoney + " --> Аккаунт " + recipientAccount.getId();
         if (amountMoney < 0) {
-            logger.info("{}: сумма перевода не может быть меньше нуля", transferInfo);
-            return;
+            throw new NegativeMoneyAmountException("Сумма перевода не может быть меньше нуля");
         }
 
         long senderAccountBalance = senderAccount.getBalance();
@@ -20,8 +22,7 @@ public class TransferMoneyService {
 
         long senderAccountRemainingBalance = senderAccountBalance - amountMoney;
         if (senderAccountRemainingBalance < 0) {
-            logger.info("{}: {} имеет недостаточно средств для перевода", transferInfo, senderAccount);
-            return;
+            throw new InsufficientBalanceException(senderAccount + "имеет недостаточно средств для перевода");
         }
 
         senderAccount.setBalance(senderAccountBalance - amountMoney);

@@ -9,7 +9,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class TransferTaskExecutor {
-    private Logger logger = LoggerFactory.getLogger(TransferTaskExecutor.class);
+    private static Logger logger = LoggerFactory.getLogger(TransferTaskExecutor.class);
     private static AccountService accountService = new AccountService();
 
     private final int numberOfTasks = 1000;
@@ -29,7 +29,7 @@ public class TransferTaskExecutor {
                 logger.info("Total sum of accounts: {}", accountService.getTotalMoneySumOfAccounts());
             }
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.debug("Ошибка во время ожидания окончания потоков.\n{}", e.getMessage());
         }
     }
 }
