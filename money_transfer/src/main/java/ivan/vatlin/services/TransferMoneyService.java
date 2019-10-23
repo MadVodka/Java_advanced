@@ -22,7 +22,7 @@ public class TransferMoneyService {
 
         long senderAccountRemainingBalance = senderAccountBalance - amountMoney;
         if (senderAccountRemainingBalance < 0) {
-            throw new InsufficientBalanceException(senderAccount + "имеет недостаточно средств для перевода");
+            throw new InsufficientBalanceException(senderAccount + " имеет недостаточно средств для перевода");
         }
 
         senderAccount.setBalance(senderAccountBalance - amountMoney);

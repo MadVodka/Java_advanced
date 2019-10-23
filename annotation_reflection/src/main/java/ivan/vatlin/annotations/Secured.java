@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Secured {
     int level();
-    String name() default "System";
+    String name() default "strict";
 }
